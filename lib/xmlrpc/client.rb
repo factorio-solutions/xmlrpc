@@ -53,7 +53,8 @@ module XMLRPC # :nodoc:
   #     end
   class Client
 
-    USER_AGENT = "XMLRPC::Client (Ruby #{RUBY_VERSION})"
+    # USER_AGENT = "XMLRPC::Client (Ruby #{RUBY_VERSION})"
+    @@USER_AGENT = "XMLRPC::Client (Ruby #{RUBY_VERSION})"
 
     include ParserWriterChooseMixin
     include ParseContentType
@@ -122,6 +123,11 @@ module XMLRPC # :nodoc:
 
 
     class << self
+
+    def set_user_agent(value)
+        @@USER_AGENT = value
+    end
+
 
     # Creates an object which represents the remote XML-RPC server at the
     # given +uri+. The URI should have a host, port, path, user and password.
@@ -463,7 +469,7 @@ module XMLRPC # :nodoc:
 
     def do_rpc(request, async=false)
       header = {
-       "User-Agent"     =>  USER_AGENT,
+       "User-Agent"     =>  @@USER_AGENT,
        "Content-Type"   => "text/xml; charset=utf-8",
        "Content-Length" => request.bytesize.to_s,
        "Connection"     => (async ? "close" : "keep-alive")
